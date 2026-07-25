@@ -1,0 +1,71 @@
+﻿// TipJar — Midnight Network Privacy-Preserving Tip Jar
+// SPDX-License-Identifier: Apache-2.0
+//
+// PUBLIC DATA (on-chain, visible to everyone):
+//   - total_tips: how many tips have been submitted to the tip jar
+//   - owner: the hashed public key commitment of the jar owner
+//   - is_active: boolean flag indicating if the tip jar is currently open
+//   - nonce: sequence counter to ensure key freshness and prevent replay attacks
+//
+// PRIVATE DATA (never leaves the user's local device):
+//   - localSecretKey: 32-byte private key used to prove jar ownership and withdraw tips
+//
+// PRIVACY GUARANTEES:
+//   - Anonymous Tipping: Tippers submit tips with zero-knowledge proofs. No identity or 
+//     wallet metadata is attached to the tip on-chain.
+//   - Zero-Knowledge Ownership: Only the jar owner can withdraw/close the jar. Ownership is 
+//     proven via ZK proof matching `owner` against the hash of `localSecretKey` without 
+//     ever revealing the secret key on-chain.
+
+pragma language_version 0.23;
+
+import CompactStandardLibrary;
+
+// ─── Public Ledger State ───────────────────────────────────────────────────
+
+export ledger total_tips: Counter;
+
+export ledger owner: Bytes<32>;
+
+export ledger is_active: Boolean;
+
+export ledger sequence: Counter;
+
+// ─── Constructor ──────────────────────────────────────────────────────────
+
+constructor() {
+  total_tips.increment(0);
+  is_active = true;
+  sequence.increment(1);
+}
+
+// ─── Private Witness ──────────────────────────────────────────────────────
+
+witness localSecretKey(): Bytes<32>;
+
+// ─── Circuits ────────────────────────────────────────────────────────────
+
+export circuit ownerKey(sk: Bytes<32>, seq: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<3, Bytes<32>>>([pad(32, "tipjar:owner:"), seq, sk]);
+}
+
+export circuit initialize(): [] {
+  const sk = localSecretKey();
+  const seqBytes = sequence as Field as Bytes<32>;
+  owner = disclose(ownerKey(sk, seqBytes));
+}
+
+export circuit tip(message: Opaque<"string">): Opaque<"string"> {
+  assert(is_active == true, "Tip jar is not accepting tips");
+  total_tips.increment(1);
+  return disclose(message);
+}
+
+export circuit withdraw(): [] {
+  assert(is_active == true, "Tip jar is already closed");
+  const sk = localSecretKey();
+  const seqBytes = sequence as Field as Bytes<32>;
+  assert(owner == ownerKey(sk, seqBytes), "Only the jar owner can withdraw");
+  is_active = disclose(false);
+  sequence.increment(1);
+}
