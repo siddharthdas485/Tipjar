@@ -1,0 +1,19 @@
+﻿{
+  "name": "@midnight-ntwrk/tipjar-cli",
+  "version": "0.1.0",
+  "author": "IOG",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/tipjar-api": "workspace:*",
+    "@midnight-ntwrk/tipjar-contract": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
