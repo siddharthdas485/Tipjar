@@ -7,11 +7,12 @@
   "type": "module",
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
+    "ci": "npm run typecheck && npm run build",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@midnight-ntwrk/tipjar-api": "workspace:*",
-    "@midnight-ntwrk/tipjar-contract": "workspace:*"
+    "@midnight-ntwrk/tipjar-api": "*",
+    "@midnight-ntwrk/tipjar-contract": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

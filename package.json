@@ -17,7 +17,7 @@
     ]
   },
   "scripts": {
-    "compact": ".\\compact.cmd compile contract/src/tipjar.compact contract/src/managed/tipjar",
+    "compact": "compact compile contract/src/tipjar.compact contract/src/managed/tipjar",
     "build": "npm run build --workspace=contract && npm run build --workspace=api && npm run build --workspace=bboard-cli && npm run build --workspace=bboard-ui",
     "deploy": "node deploy.ts"
   },

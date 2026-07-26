@@ -8,6 +8,7 @@
   "scripts": {
     "build": "node build.js preprod",
     "build:preview": "node build.js preview",
+    "ci": "npm run build",
     "build:start": "npm run build && vite preview --port 8080 --host",
     "start": "vite --port 8080 --host"
   },
@@ -20,8 +21,8 @@
     "@midnight-ntwrk/midnight-js-protocol": "4.1.1",
     "@midnight-ntwrk/midnight-js-types": "4.1.1",
     "@midnight-ntwrk/midnight-js-utils": "4.1.1",
-    "@midnight-ntwrk/tipjar-api": "workspace:*",
-    "@midnight-ntwrk/tipjar-contract": "workspace:*",
+    "@midnight-ntwrk/tipjar-api": "*",
+    "@midnight-ntwrk/tipjar-contract": "*",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.8",
@@ -35,6 +36,8 @@
     "semver": "^7.8.4"
   },
   "devDependencies": {
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^5.0.0",
     "typescript": "^5.9.3",
     "vite": "^6.2.0",
