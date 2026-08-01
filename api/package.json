@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@midnight-ntwrk/tipjar-api",
   "version": "0.1.0",
   "author": "IOG",
@@ -17,6 +17,6 @@
     "@midnight-ntwrk/tipjar-contract": "*"
   },
   "devDependencies": {
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   }
 }
